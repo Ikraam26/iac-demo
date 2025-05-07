@@ -6,44 +6,35 @@ provider "aws" {
   skip_metadata_api_check     = true
   skip_credentials_validation = true
   endpoints {
-    ec2 = "provider "aws" {
-  region                      = "us-east-1"
-  access_key                  = "test"
-  secret_key                  = "test"
-  skip_requesting_account_id  = true
-  skip_metadata_api_check     = true
-  skip_credentials_validation = true
-  endpoints {
     ec2 = "http://ip10-0-2-6-cvh9tgab9qb14bivkplg-4566.direct.lab-boris.fr"
   }
 }
 
-variable "ami_id" {
-  type = string
+# ==== Déclaration de variables pour personnalisation ====
+
+variable "timestamp" {
+  description = "Un identifiant unique pour créer une instance unique"
+  type        = string
 }
 
-resource "aws_instance" "demo" {
+variable "ami_id" {
+  description = "AMI aléatoire"
+  type        = string
+}
+
+# ==== Création de l'instance EC2 avec un nom UNIQUE ====
+
+resource "aws_instance" "ec2_instance_${var.timestamp}" {
   ami           = var.ami_id
   instance_type = "t2.micro"
-}
 
-output "instance_id" {
-  value = aws_instance.demo.id
-}
-"
+  tags = {
+    Name = "GitHubInstance-${var.timestamp}"
   }
 }
 
-variable "ami_id" {
-  type = string
-}
-
-resource "aws_instance" "demo" {
-  ami           = var.ami_id
-  instance_type = "t2.micro"
-}
+# ==== Output pour récupérer l'ID de l'instance ====
 
 output "instance_id" {
-  value = aws_instance.demo.id
+  value = aws_instance.ec2_instance_${var.timestamp}.id
 }
-
