@@ -1,5 +1,12 @@
-
 provider "aws" {
+  region                      = "us-east-1"
+  access_key                  = "test"
+  secret_key                  = "test"
+  skip_requesting_account_id  = true
+  skip_metadata_api_check     = true
+  skip_credentials_validation = true
+  endpoints {
+    ec2 = "provider "aws" {
   region                      = "us-east-1"
   access_key                  = "test"
   secret_key                  = "test"
@@ -11,7 +18,32 @@ provider "aws" {
   }
 }
 
+variable "ami_id" {
+  type = string
+}
+
 resource "aws_instance" "demo" {
-  ami           = "ami-12345678"
+  ami           = var.ami_id
   instance_type = "t2.micro"
 }
+
+output "instance_id" {
+  value = aws_instance.demo.id
+}
+"
+  }
+}
+
+variable "ami_id" {
+  type = string
+}
+
+resource "aws_instance" "demo" {
+  ami           = var.ami_id
+  instance_type = "t2.micro"
+}
+
+output "instance_id" {
+  value = aws_instance.demo.id
+}
+
